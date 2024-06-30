@@ -1,0 +1,104 @@
+<HTML>
+<HEAD>
+   <HTA:APPLICATION ID="oHTA"
+    APPLICATIONNAME="myApp"
+    WINDOWSTATE="maximize"
+   >
+
+</HEAD>
+<BODY >
+    Consolidado
+    <div id="Div1" name="Div1" class="opcao"></div>
+    <br>
+    Detalhado
+    <div id="DVapp" name="DVapp" class="opcao"></div>
+
+</BODY>
+</HTML>
+   <SCRIPT language=vbscript>
+        Set cmd = CreateObject("ADODB.Command")
+        cmd.ActiveConnection ="PROVIDER=SQLOLEDB;Data Source=177.153.10.50;Initial Catalog=DB_GestaoSPA;Persist Security Info=True;User ID=DB_GestaoSPA;Password=dbasqldgm;Application Name=HTA_BETO"
+        srtRP1 =""
+        srtRP1 = srtRP1 & " select isnull(CONVERT(VARCHAR(10), DT_CREATE, 103),'') as DATA,EMPRESA,STATUS_RETORNO,sum(QTD) as qtd from (     "
+        srtRP1 = srtRP1 & " select CONVERT(datetime,CONVERT(VARCHAR(10), DT_CREATE, 23)) as DT_CREATE,"
+        srtRP1 = srtRP1 & " 	UPPER((select NOM_REDUZIDO from VW_EMPRESA_FILIAL where  VW_EMPRESA_FILIAL.COD_EMPRESA_FILIAL = TB_EDICAO_SMS.COD_EMPRESA_FILIAL )) as EMPRESA,   "
+        srtRP1 = srtRP1 & " 	substring(STATUS_RETORNO,1,47) as STATUS_RETORNO, "
+        srtRP1 = srtRP1 & " 	count(celular) QTD "
+        srtRP1 = srtRP1 & " from TB_DESTINATARIO_SMS_HIST tbsms inner join TB_EDICAO_SMS "
+        srtRP1 = srtRP1 & " on tbsms.COD_EDICAO = TB_EDICAO_SMS.COD_EDICAO "
+        srtRP1 = srtRP1 & " where  DT_CREATE >  getdate()-31 "
+        srtRP1 = srtRP1 & " group by 	CONVERT(datetime,CONVERT(VARCHAR(10), DT_CREATE, 23)) ,tB_EDICAO_SMS.COD_EMPRESA_FILIAL,   "
+        srtRP1 = srtRP1 & " 		substring(STATUS_RETORNO,1,47) "
+        srtRP1 = srtRP1 & " ) tb "
+        srtRP1 = srtRP1 & " group by DT_CREATE,EMPRESA,STATUS_RETORNO order by DT_CREATE desc,EMPRESA"
+
+
+        cmd.CommandText = srtRP1
+      
+      set rs = CreateObject("ADODB.recordset")
+      Set rs = cmd.Execute
+         strExibe =""
+        strExibe =  strExibe + "<table width=100% border=1>" 
+         strExibe =  strExibe + "<tr>" 
+        for i = 0 to rs.Fields.Count - 1
+             strExibe =  strExibe + "<td><strong>" & rs.Fields(i).Name & "<strong></td>" 
+        next
+             strExibe =  strExibe + "</tr>"
+            
+        Do While Not rs.EOF
+                 strExibe =  strExibe + "<tr>" 
+            for i = 0 to rs.Fields.Count - 1
+                     strExibe =  strExibe + "<td>" & rs.Fields(i) & "&nbsp;</td>" 
+            next
+            rs.MoveNext
+                strExibe =  strExibe + "</tr>"
+        Loop
+                strExibe =  strExibe + "</table>"
+
+    document.getElementById("DVapp").innerHTML=strExibe
+</SCRIPT>
+
+
+   <SCRIPT language=vbscript>
+        Set cmd = CreateObject("ADODB.Command")
+        cmd.ActiveConnection ="PROVIDER=SQLOLEDB;Data Source=177.153.10.50;Initial Catalog=DB_GestaoSPA;Persist Security Info=True;User ID=DB_GestaoSPA;Password=dbasqldgm;Application Name=HTA_BETO"
+        srtRP1 =""
+        srtRP1 = srtRP1 & " select  EMPRESA,STATUS_RETORNO, sum(QTD) as qtd from (     "
+        srtRP1 = srtRP1 & " select      "
+        srtRP1 = srtRP1 & " UPPER((select NOM_REDUZIDO  from VW_EMPRESA_FILIAL where  VW_EMPRESA_FILIAL.COD_EMPRESA_FILIAL = TB_EDICAO_SMS.COD_EMPRESA_FILIAL )) as EMPRESA,     "  
+        srtRP1 = srtRP1 & " substring(STATUS_RETORNO,1,47) as STATUS_RETORNO,     "
+        srtRP1 = srtRP1 & " count(celular) QTD     "
+        srtRP1 = srtRP1 & " from TB_DESTINATARIO_SMS_HIST tbsms inner join TB_EDICAO_SMS     "
+        srtRP1 = srtRP1 & " on tbsms.COD_EDICAO = TB_EDICAO_SMS.COD_EDICAO     "
+        srtRP1 = srtRP1 & " where  DT_CREATE >  getdate()-31     "
+        srtRP1 = srtRP1 & " group by 	tB_EDICAO_SMS.COD_EMPRESA_FILIAL,       "
+        srtRP1 = srtRP1 & " substring(STATUS_RETORNO,1,47)     "
+        srtRP1 = srtRP1 & " ) tb     "
+        srtRP1 = srtRP1 & " group by EMPRESA,STATUS_RETORNO     "
+        srtRP1 = srtRP1 & "  order by EMPRESA     "
+
+
+        cmd.CommandText = srtRP1
+      
+      set rs = CreateObject("ADODB.recordset")
+      Set rs = cmd.Execute
+        strExibe =""
+        strExibe =  strExibe + "<table width=100% border=1>" 
+         strExibe =  strExibe + "<tr>" 
+        for i = 0 to rs.Fields.Count - 1
+             strExibe =  strExibe + "<td><strong>" & rs.Fields(i).Name & "<strong></td>" 
+        next
+             strExibe =  strExibe + "</tr>"
+            
+        Do While Not rs.EOF
+                 strExibe =  strExibe + "<tr>" 
+            for i = 0 to rs.Fields.Count - 1
+                     strExibe =  strExibe + "<td>" & rs.Fields(i) & "&nbsp;</td>" 
+            next
+            rs.MoveNext
+                strExibe =  strExibe + "</tr>"
+        Loop
+                strExibe =  strExibe + "</table>"
+
+    document.getElementById("Div1").innerHTML=strExibe
+</SCRIPT>

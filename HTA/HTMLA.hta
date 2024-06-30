@@ -1,0 +1,159 @@
+<HTML>
+  <HEAD>  
+    <HTA:APPLICATION
+      ID="oHTA"
+      APPLICATIONNAME="listas"
+      BORDER="thin"
+      BORDERSTYLE="normal"
+      CAPTION="yes"
+      CONTEXTMENU="no"
+      ICON="icone.ico"
+      INNERBORDER="no"
+      MAXIMIZEBUTTON="no"
+      MINIMIZEBUTTON="yes"
+      NAVIGABLE="yes"
+      SCROLL="no"
+      SCROLLFLAT="yes"
+      SELECTION="no"
+      SHOWINTASKBAR="no"
+      SINGLEINSTANCE="yes"
+      SYSMENU="yes"
+      VERSION="1.0"
+      WINDOWSTATE="maximize"
+    />
+    <SCRIPT type="text/javascript">
+      function verPropriedades(){
+        //Application Name ==================================================
+        vAN = oHTA.applicationName;
+        document.getElementById('dApplicationname').innerHTML=vAN;
+        //Border ============================================================
+        // thick Default. Thick window border, plus a size grip and sizing border for resizing the window. 
+        // dialog Dialog window border. 
+        // none No window border. 
+        // thin Thin window border with a caption. 
+        vB = oHTA.border;
+        document.getElementById('dBorder').innerHTML=vB;
+        //BorderStyle ========================================================
+        // normal Default. Normal border. 
+        // complex Raised and sunken border. 
+        // raised Raised 3-D border. 
+        // static 3-D border typically used for windows that do not accept user input. 
+        // sunken Sunken 3-D border. 
+        vBS = oHTA.borderStyle;
+        document.getElementById('dBorderStyle').innerHTML=vBS;
+        //Caption ============================================================
+        // yes Default. Title bar is displayed. 
+        // no Title bar is not displayed. 
+        vC = oHTA.caption;
+        document.getElementById('dCaption').innerHTML=vC;
+        //CommandLine ========================================================
+        vCL = oHTA.commandLine;
+        document.getElementById('dCommandLine').innerHTML=vCL;
+        //ContextMenu ========================================================
+        // yes Default. Context menus are displayed. 
+        // no Context menus are not displayed. 
+        vCM = oHTA.contextMenu;
+        document.getElementById('dContextMenu').innerHTML=vCM;
+        //Icon ===============================================================
+        vI = oHTA.icon;
+        document.getElementById('dIcon').innerHTML=vI;
+        //InnerBorder ========================================================
+        // yes Default. Three-dimensional inner border is displayed. 
+        // no Inner border is not displayed. 
+        vIB = oHTA.innerBorder;
+        document.getElementById('dInnerBorder').innerHTML=vIB;
+        //MaximizeButton =====================================================
+        // yes Default. Maximize button is displayed. 
+        // no Maximize button is not displayed. 
+        vMB = oHTA.maximizeButton;
+        document.getElementById('dMaximizeButton').innerHTML=vMB;
+        //MinimizeButton ===================================================== 
+        // yes Default. Minimize button is displayed. 
+        // no Minimize button is not displayed. 
+        vMB2 = oHTA.minimizeButton;
+        document.getElementById('dMinimizeButton').innerHTML=vMB2;
+        //Navigable ==========================================================
+        // no Default. Links in the main HTA window will be loaded in a new browser window. 
+        // yes Links in the main HTA window will be loaded in the main HTA window. 
+        vN = oHTA.navigable;
+        document.getElementById('dNavigable').innerHTML=vN;
+        //Scroll =============================================================
+        // yes Default. Scroll bars are displayed. 
+        // no Scroll bars are not displayed. 
+        // auto Scroll bars are displayed only when the content exceeds what can fit in the client area. 
+        vS = oHTA.scroll;
+        document.getElementById('dScroll').innerHTML=vS;
+        //ScrollFlat ==========================================================
+        // yes Scroll bars are flat. 
+        // no Default. Scroll bars are 3-D. 
+        vSF = oHTA.scroll;
+        document.getElementById('dScrollFlat').innerHTML=vSF;
+        //Selection ===========================================================
+        // yes Default. Content can be selected with the mouse or keyboard. 
+        // no Content cannot be selected with the mouse or keyboard.  
+        vSE = oHTA.selection;
+        document.getElementById('dSelection').innerHTML=vSE;
+        //ShowInTaskBar =======================================================
+        // yes Default. Application is displayed in the Windows taskbar. 
+        // no Application is not displayed in the Windows taskbar. 
+        vSIT = oHTA.showInTaskBar;
+        document.getElementById('dShowInTaskBar').innerHTML=vSIT;
+        //SingleInstance ======================================================
+        // yes Only one instance of the specified application can run at a time. 
+        // no Default. Multiple instances of the specified application can run at the same time. 
+        vSI = oHTA.singleInstance;
+        document.getElementById('dSingleInstance').innerHTML=vSI;
+        //SysMenu =============================================================
+        vSM = oHTA.sysMenu;
+        document.getElementById('dSysMenu').innerHTML=vSI;
+        //Version =============================================================
+        vV = oHTA.version;
+        document.getElementById('dVersion').innerHTML=vV;
+        //WindowState =========================================================
+        // normal Default. Window is the default size for Microsoft Internet Explorer. 
+        // minimize Window does not display on launch. Instead, the title of the minimized application appears in the taskbar. 
+        //maximize Window is sized to fill the screen. 
+        vWS = oHTA.windowState;
+        document.getElementById('dWindowState').innerHTML=vWS;
+      }
+    </SCRIPT>
+    <style type="text/css">
+      body {
+        font-family: Georgia;
+      }
+      span {
+        float: left;
+      }
+      .opcao {
+        font-family: Courier New;
+        color: RED;
+      }
+    </style>
+    <TITLE>HTA - HTML Application</TITLE>
+  </HEAD>
+  <BODY>
+    <H1>HTA - HTML Aplication</H1>
+    <H2>Propriedades</H2> 
+    <span>Nome da aplicação: </span><span id="dApplicationname" class="opcao"></span><br />
+    <span>Borda: </span><span id="dBorder" class="opcao"></span><br />
+    <span>Estilo da Borda: </span><span id="dBorderStyle" class="opcao"></span><br />
+    <span>Subtítulo: </span><span id="dCaption" class="opcao"></span><br />
+    <span>Linha de comando: </span><span id="dCommandLine" class="opcao"></span><br />
+    <span>Contexto de menu: </span><span id="dContextMenu" class="opcao"></span><br />
+    <span>Icone: </span><span id="dIcon" class="opcao"></span><br />
+    <span>Borda Interna: </span><span id="dInnerBorder" class="opcao"></span><br />
+    <span>Botão de Maximizar: </span><span id="dMaximizeButton" class="opcao"></span><br />
+    <span>Botão de Manimizar: </span><span id="dMinimizeButton" class="opcao"></span><br />
+    <span>Navegável: </span><span id="dNavigable" class="opcao"></span><br />
+    <span>Barra de rolagem: </span><span id="dScroll" class="opcao"></span><br />
+    <span>Barra de rolagem chata: </span><span id="dScrollFlat" class="opcao"></span><br />
+    <span>Seleção: </span><span id="dSelection" class="opcao"></span><br />
+    <span>Exibir no gerenciador de tarefas: </span><span id="dShowInTaskBar" class="opcao"></span><br />
+    <span>Única Instância: </span><span id="dSingleInstance" class="opcao"></span><br />
+    <span>Menu do Sistema: </span><span id="dSysMenu" class="opcao"></span><br />
+    <span>Versão: </span><span id="dVersion" class="opcao"></span><br />
+    <span>Estado da Janela: </span><span id="dWindowState" class="opcao"></span><br />
+    <br clear="all">
+    <a HRef="#" onClick="verPropriedades();" Title="clique para ver propriedades do HTA">Ver Propriedades</a>
+  </BODY>
+</HTML>

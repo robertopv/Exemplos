@@ -1,0 +1,126 @@
+<HTML>
+<HEAD>
+   <HTA:APPLICATION ID="oHTA"
+    APPLICATIONNAME="myApp"
+    WINDOWSTATE="maximize"
+   >
+
+</HEAD>
+<BODY >
+    Relatorio de SMS por mes :
+				<select id="SelecionaMes" name="SelecionaMes" style="width:'150px'" selected="selected" onchange="SelecionaPorMes()">
+					<option value="1">Janeiro</option>
+					<option value="2">Fevereiro</option>
+					<option value="3">Março</option>
+					<option value="4">Abril</option>
+					<option value="5">Maio</option>
+					<option value="6">Junho</option>
+					<option value="7">Julho</option>
+					<option value="8">Agosto</option>
+					<option value="9">Setembro</option>
+					<option value="10">Outubro</option>
+					<option value="11">Novembro</option>
+					<option value="12">Dezembro</option></select>
+
+            <select id="SelecionaUnidade" name="SelecionaUnidade" style="width:'150px'" selected="selected" onchange="SelecionaPorMes()">
+					<option value="0">Todas</option>
+                </select>
+    <br>
+        <br>
+    <div id="DVDetalhado" name="DVDetalhado" class="opcao"></div>
+</BODY>
+</HTML>
+
+
+   <SCRIPT language=vbscript>
+
+        Set cmd = CreateObject("ADODB.Command")
+        cmd.ActiveConnection ="PROVIDER=SQLOLEDB;Data Source=177.153.10.50;Initial Catalog=DB_GestaoSPA;Persist Security Info=True;User ID=DB_GestaoSPA;Password=dbasqldgm;Application Name=HTA_BETO"
+        srtRP1 ="select distinct COD_EMPRESA,NOM_REDUZIDO from VW_EMPRESA_FILIAL order by NOM_REDUZIDO"
+
+
+
+        cmd.CommandText = srtRP1
+      
+      set rs = CreateObject("ADODB.recordset")
+      Set rs = cmd.Execute
+
+        for i = 0 to rs.Fields.Count - 1
+             strExibe =  strExibe + "<td><strong>" & rs.Fields(i).Name & "<strong></td>" 
+        next
+
+           
+        Do While Not rs.EOF
+                Set objOption = Document.createElement("OPTION")
+                    objOption.Text = rs.Fields(1)
+                    objOption.Value = rs.Fields(0)
+                document.getElementById("SelecionaUnidade").Add(objOption)
+                 rs.MoveNext
+        Loop
+
+
+
+
+
+     sub SelecionaPorMes()
+        document.getElementById("DVDetalhado").innerHTML="Aguarde..."
+        mes = document.getElementById("SelecionaMes").value
+        emp = document.getElementById("SelecionaUnidade").value
+        Set cmd = CreateObject("ADODB.Command")
+        cmd.ActiveConnection ="PROVIDER=SQLOLEDB;Data Source=177.153.10.50;Initial Catalog=DB_GestaoSPA;Persist Security Info=True;User ID=DB_GestaoSPA;Password=dbasqldgm;Application Name=HTA_BETO"
+        srtRP1 =""
+
+
+
+
+        srtRP1 = srtRP1 & " SELECT       "
+        srtRP1 = srtRP1 & "   qtdSMSenviado.DATA,      "
+        'srtRP1 = srtRP1 & "     dbo.VW_EMPRESA_FILIAL.COD_EMPRESA_FILIAL,      "
+        'srtRP1 = srtRP1 & "      dbo.VW_EMPRESA_FILIAL.COD_EMPRESA,      "
+        srtRP1 = srtRP1 & "      dbo.VW_EMPRESA_FILIAL.NOM_REDUZIDO,      "
+        srtRP1 = srtRP1 & "      dbo.VW_EMPRESA_FILIAL.NOM_FILIAL,      "
+        srtRP1 = srtRP1 & "       ISNULL(qtdSMSenviado.qtd, 0) AS QTD_SMS     "
+        'srtRP1 = srtRP1 & "       qtdSMSenviado.mes     "
+        srtRP1 = srtRP1 & "  FROM           "
+        srtRP1 = srtRP1 & "        dbo.VW_EMPRESA_FILIAL      "
+        srtRP1 = srtRP1 & "         left join          "
+        srtRP1 = srtRP1 & "        (SELECT        COUNT(COD_DESTINATARIO_SMS) AS qtd,      "
+        srtRP1 = srtRP1 & "                       COD_EMPRESA_FILIAL,      "
+        srtRP1 = srtRP1 & "                       CONVERT(varchar, DATEPART(mm, DT_CREATE)) + '/' + CONVERT(varchar, DATEPART(yy, DT_CREATE)) AS DATA,      "
+        srtRP1 = srtRP1 & "                      DATEPART(mm, DT_CREATE)  AS mes     "
+        srtRP1 = srtRP1 & "        FROM            dbo.TB_DESTINATARIO_SMS_HIST     "
+        srtRP1 = srtRP1 & "        WHERE        (DATEPART(yy, DT_CREATE) > 2018)      "
+        srtRP1 = srtRP1 & "          and DATEPART(mm, DT_CREATE)=" & mes
+        srtRP1 = srtRP1 & "         GROUP BY COD_EMPRESA_FILIAL, CONVERT(varchar,       "
+        srtRP1 = srtRP1 & "              DATEPART(mm, DT_CREATE)) + '/' + CONVERT(varchar, DATEPART(yy, DT_CREATE)),      "
+        srtRP1 = srtRP1 & "               DATEPART(mm, DT_CREATE)) AS qtdSMSenviado     "
+        srtRP1 = srtRP1 & "                      ON qtdSMSenviado.COD_EMPRESA_FILIAL = dbo.VW_EMPRESA_FILIAL.COD_EMPRESA_FILIAL     "
+        srtRP1 = srtRP1 & "        WHERE     dbo.VW_EMPRESA_FILIAL.COD_EMPRESA =  " & emp & " or 0 = " & emp 
+        srtRP1 = srtRP1 & "  order by    dbo.VW_EMPRESA_FILIAL.NOM_REDUZIDO ,qtdSMSenviado.mes,dbo.VW_EMPRESA_FILIAL.COD_EMPRESA_FILIAL    "
+        'msgbox(srtRP1)
+
+        cmd.CommandText = srtRP1
+      
+      set rs = CreateObject("ADODB.recordset")
+      Set rs = cmd.Execute
+        strExibe =""
+        strExibe =  strExibe + "<table width=100% border=1>" 
+         strExibe =  strExibe + "<tr>" 
+        for i = 0 to rs.Fields.Count - 1
+             strExibe =  strExibe + "<td><strong>" & rs.Fields(i).Name & "<strong></td>" 
+        next
+             strExibe =  strExibe + "</tr>"
+            
+        Do While Not rs.EOF
+                 strExibe =  strExibe + "<tr>" 
+            for i = 0 to rs.Fields.Count - 1
+                     strExibe =  strExibe + "<td>" & rs.Fields(i) & "&nbsp;</td>" 
+            next
+            rs.MoveNext
+                strExibe =  strExibe + "</tr>"
+        Loop
+                strExibe =  strExibe + "</table>"
+
+    document.getElementById("DVDetalhado").innerHTML=strExibe
+    end sub
+</SCRIPT>
